@@ -1,0 +1,11 @@
+stages:
+  - test
+  - build
+
+unit tests:
+  stage: test
+  tags: [gitlab-org-docker]
+  image: python:3.7
+  script:
+    - pip install --no-cache-dir -r requirements.txt
+    - python showpipeline_test.py
