@@ -1,6 +1,7 @@
 stages:
   - test
   - build
+  - deploy
 
 unit tests:
   stage: test
@@ -8,4 +9,25 @@ unit tests:
   image: python:3.7
   script:
     - pip install --no-cache-dir -r requirements.txt
-    - python showpipeline_test.py
+    - python showpipeline_tests.py
+
+stub build 1:
+  stage: build
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - echo "build 1"
+
+stub build 2:
+  stage: build
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - echo "build 2"
+
+stub deploy:
+  stage: build
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - echo "deploy"
