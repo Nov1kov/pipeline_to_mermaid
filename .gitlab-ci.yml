@@ -26,7 +26,7 @@ stub build 2:
     - echo "build 2"
 
 stub deploy:
-  stage: build
+  stage: deploy
   variables:
     GIT_STRATEGY: none
   script:
