@@ -112,5 +112,5 @@ axisFormat  %H:%M:%S
         if not job.started_at or not job.finished_at:
             if last_job_id:
                 return f'after {last_job_id}, 15s\n'
-            return '15s\n'
+            return f'{job.created_at}, 15s\n'
         return f'{job.started_at}, {job.finished_at}\n'

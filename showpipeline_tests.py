@@ -258,12 +258,14 @@ class GitlabRunning(unittest.TestCase):
                         'status': 'running',
                         'stage': 'build',
                         'started_at': '2020-09-12T12:26:05.370Z',
+                        'created_at': '2020-09-12T21:45:02.379Z',
                         'finished_at': None,
                         'name': 'android'}),
             StubObject({'id': '730991284',
                         'status': 'running',
                         'stage': 'build',
                         'started_at': '2020-09-12T12:26:05.370Z',
+                        'created_at': '2020-09-12T21:45:02.379Z',
                         'finished_at': None,
                         'name': 'ios'}),
             StubObject({'id': '730991285',
@@ -271,12 +273,14 @@ class GitlabRunning(unittest.TestCase):
                         'stage': 'deploy',
                         'started_at': None,
                         'finished_at': None,
+                        'created_at': '2020-09-12T21:45:02.379Z',
                         'name': 'slack:android'}),
             StubObject({'id': '730991286',
                         'status': 'created',
                         'stage': 'deploy',
                         'started_at': None,
                         'finished_at': None,
+                        'created_at': '2020-09-12T21:45:02.379Z',
                         'name': 'slack:ios'}),
         ]
 
@@ -316,8 +320,8 @@ dateFormat  YYYY-MM-DDTHH:mm:ss.SSSZ
 axisFormat  %H:%M:%S
 
 section build
-android :active, 730991283, 15s
-ios :active, 730991284, 15s
+android :active, 730991283, 2020-09-12T21:45:02.379Z, 15s
+ios :active, 730991284, 2020-09-12T21:45:02.379Z, 15s
 
 section deploy
 slack-android :done, 730991285, after 730991283, 15s

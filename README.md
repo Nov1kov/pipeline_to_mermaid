@@ -184,3 +184,4 @@ slack-ios :done, 730991286, after 730991283, 15s
 - https://gitlab.version.fz-juelich.de/vis/jusense-cicd/-/wikis/discussion-on-howto-include-badges-in-gitlab-...
 - https://github.com/jongracecox/anybadge
 - https://docs.gitlab.com/ee/api/wikis.html
+- make python package
