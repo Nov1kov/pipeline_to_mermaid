@@ -166,8 +166,8 @@ dateFormat  YYYY-MM-DDTHH:mm:ss.SSSZ
 axisFormat  %H:%M:%S
 
 section build
-android :active, 730991283, 15s
-ios :active, 730991284, 15s
+android :active, 730991283, 2020-09-12T21:45:02.379Z, 15s
+ios :active, 730991284, 2020-09-12T21:45:02.379Z, 15s
 
 section deploy
 slack-android :done, 730991285, after 730991283, 15s
