@@ -20,8 +20,8 @@ def styles():
     return '''
 classDef failed fill:white,stroke:#db3b21,color:black;
 classDef success fill:white,stroke:#1aaa55,color:black;
-classDef classWarn fill:white,stroke:#fc9403,color:black
-classDef canceled fill:white,stroke:#999
+classDef classWarn fill:white,stroke:#fc9403,color:black;
+classDef canceled fill:white,stroke:#999,color:black;
 '''
 
 
