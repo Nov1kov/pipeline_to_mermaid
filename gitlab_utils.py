@@ -21,7 +21,7 @@ def styles():
 classDef failed fill:white,stroke:#db3b21,color:black;
 classDef success fill:white,stroke:#1aaa55,color:black;
 classDef warning fill:white,stroke:#fc9403,color:black;
-classDef canceled fill:white,stroke:#999,color:black;
+classDef skipped fill:white,stroke:#999,color:black;
 '''
 
 

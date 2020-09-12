@@ -26,4 +26,4 @@ class GitlabHelper:
 
 if __name__ == "__main__":
     gl = GitlabHelper()
-    gl.show_pipeline_to_merge_request('189123361')
+    gl.show_pipeline_to_merge_request('189124072')
