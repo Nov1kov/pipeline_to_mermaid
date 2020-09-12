@@ -241,9 +241,9 @@ android :crit, 730991283, 2020-09-12T12:26:05.370Z, 2020-09-12T12:26:41.665Z
 ios : 730991284, 2020-09-12T12:26:05.370Z, 2020-09-12T12:26:47.665Z
 
 section deploy
-s3 :done, 730991285, after 730991284, 5s
-firebase :done, 730991286, after 730991284, 5s
-firebase :done, 730991287, after 730991284, 5s
+s3 :done, 730991285, after 730991284, 15s
+firebase :done, 730991286, after 730991284, 15s
+firebase :done, 730991287, after 730991284, 15s
 ```''', result)
 
 

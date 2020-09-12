@@ -1,7 +1,9 @@
 from itertools import groupby
 
+from gitlab_utils import str_to_datetime, datetime_to_srt
 
-class GraphGenerator():
+
+class GraphGenerator:
 
     def __init__(self, jobs):
         self.jobs = jobs
@@ -48,7 +50,7 @@ classDef skipped fill:white,stroke:#999,color:black;
         return text
 
 
-class GanttGenerator():
+class GanttGenerator:
 
     def __init__(self, jobs):
         self.jobs = jobs
@@ -57,8 +59,11 @@ class GanttGenerator():
         self.jobs.sort(key=lambda k: k.id)
         scheme = 'gantt\n'
         scheme += self.__date_format()
+        last_job_id = None
         for k, g in groupby(self.jobs, key=lambda j: j.stage):
-            scheme += self.__stage(k, list(g))
+            stage_jobs = list(g)
+            scheme += self.__stage(k, stage_jobs, last_job_id)
+            last_job_id = self.__get_finished_stage_at(stage_jobs)
         return f'```mermaid\n{scheme}```'
 
     def __date_format(self):
@@ -67,10 +72,13 @@ dateFormat  YYYY-MM-DDTHH:mm:ss.SSSZ
 axisFormat  %H:%M:%S
 '''
 
-    def __stage(self, stage, jobs):
+    def __stage(self, stage, jobs, last_job_id):
         text = f'\nsection {stage}\n'
         for job in jobs:
-            text += f'{job.name} :{self.__get_status(job)} {job.id}, {job.started_at}, {job.finished_at}\n'
+            if not job.started_at or not job.finished_at:
+                text += f'{job.name} :{self.__get_status(job)} {job.id}, after {last_job_id}, 15s\n'
+            else:
+                text += f'{job.name} :{self.__get_status(job)} {job.id}, {job.started_at}, {job.finished_at}\n'
         return text
 
     def __get_status(self, job):
@@ -83,3 +91,10 @@ axisFormat  %H:%M:%S
         if job.status == 'skipped':
             return 'done,'
         return ''
+
+    def __get_finished_stage_at(self, stage_jobs):
+        finished_jobs = [job for job in stage_jobs if job.finished_at]
+        if finished_jobs:
+            job = max(finished_jobs, key=lambda j: str_to_datetime(j.finished_at))
+            return job.id
+        return None
