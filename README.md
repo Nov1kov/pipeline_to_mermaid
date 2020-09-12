@@ -80,3 +80,8 @@ class 730991285 skipped
 class 730991286 skipped
 class 730991287 skipped
 ```
+
+## todo:
+- https://gitlab.version.fz-juelich.de/vis/jusense-cicd/-/wikis/discussion-on-howto-include-badges-in-gitlab-...
+- https://github.com/jongracecox/anybadge
+- https://docs.gitlab.com/ee/api/wikis.html

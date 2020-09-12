@@ -11,24 +11,26 @@ unit tests:
     - pip install --no-cache-dir -r requirements.txt
     - python showpipeline_tests.py
 
-stub build 1:
+android:
   stage: build
   variables:
     GIT_STRATEGY: none
   script:
-    - exit 1
+    - sleep 20
     - echo "build 1"
 
-stub build 2:
+ios:
   stage: build
   variables:
     GIT_STRATEGY: none
   script:
+    - sleep 24
     - echo "build 2"
 
-stub deploy:
+staging:
   stage: deploy
   variables:
     GIT_STRATEGY: none
   script:
+    - sleep 10
     - echo "deploy"
