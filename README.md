@@ -3,7 +3,7 @@
 - `GITLAB_API_TOKEN` - gitlab api token
 
 
-### Gitlab pipeline as graph LR
+## Gitlab pipeline as graph LR
 
 ```mermaid
 graph LR
@@ -79,6 +79,25 @@ class 730991284 success
 class 730991285 skipped
 class 730991286 skipped
 class 730991287 skipped
+```
+
+## Gitlab pipeline as gantt
+
+```mermaid
+gantt
+
+dateFormat  YYYY-MM-DDTHH:mm:ss.SSSZ
+axisFormat  %H:%M:%S
+
+section test
+unit tests : 730991283, 2020-09-12T12:26:05.370Z, 2020-09-12T12:26:41.665Z
+
+section build
+build : 730991284, 2020-09-12T12:26:42.182Z, 2020-09-12T12:27:38.126Z
+
+section deploy
+s3 : 730991285, 2020-09-12T12:27:43.757Z, 2020-09-12T12:28:35.406Z
+firebase : 730991286, 2020-09-12T12:27:43.757Z, 2020-09-12T12:28:44.406Z
 ```
 
 ## todo:

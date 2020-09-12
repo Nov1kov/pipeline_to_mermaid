@@ -1,6 +1,6 @@
 import os
 
-from gitlab_utils import get_project, pipeline_to_mermaid
+from gitlab_utils import get_project, pipeline_to_graph
 
 
 # https://github.community/t/feature-request-support-mermaid-markdown-graph-diagrams-in-md-files/1922/27
@@ -19,7 +19,7 @@ class GitlabHelper:
         #merge_request = project.mergerequests.get(id=os.environ['CI_MERGE_REQUEST_IID'])
         pipeline = project.pipelines.get(pipeline_id)
         jobs = pipeline.jobs.list()
-        text = pipeline_to_mermaid(jobs)
+        text = pipeline_to_graph(jobs)
         print(jobs)
 
 

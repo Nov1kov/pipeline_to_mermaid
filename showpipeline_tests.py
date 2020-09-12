@@ -2,7 +2,7 @@ import os
 import unittest
 from unittest import mock
 
-from gitlab_utils import pipeline_to_mermaid
+from generators import *
 
 
 class GitlabWarningRed(unittest.TestCase):
@@ -39,7 +39,7 @@ class GitlabWarningRed(unittest.TestCase):
         ]
 
     def test_graph_lr(self):
-        result = pipeline_to_mermaid(self.jobs)
+        result = GraphGenerator(self.jobs).to_mermaid()
         self.assertEqual('''```mermaid
 graph LR
 
@@ -64,7 +64,7 @@ class 730991286 success
 class 730991287 failed
 ```''', result)
 
-    def test_grantt(self):
+    def test_gantt(self):
         pass
 
 
@@ -75,24 +75,32 @@ class GitlabGreen(unittest.TestCase):
             StubObject({'id': '730991283',
                         'status': 'success',
                         'stage': 'test',
+                        'started_at': '2020-09-12T12:26:05.370Z',
+                        'finished_at': '2020-09-12T12:26:41.665Z',
                         'name': 'unit tests'}),
             StubObject({'id': '730991284',
                         'status': 'success',
-                        'stage': ' build',
+                        'stage': 'build',
+                        'started_at': '2020-09-12T12:26:42.182Z',
+                        'finished_at': '2020-09-12T12:27:38.126Z',
                         'name': 'build'}),
             StubObject({'id': '730991285',
                         'status': 'success',
                         'stage': 'deploy',
+                        'started_at': '2020-09-12T12:27:43.757Z',
+                        'finished_at': '2020-09-12T12:28:35.406Z',
                         'name': 's3'}),
             StubObject({'id': '730991286',
                         'status': 'success',
                         'stage': 'deploy',
+                        'started_at': '2020-09-12T12:27:43.757Z',
+                        'finished_at': '2020-09-12T12:28:44.406Z',
                         'name': 'firebase'}),
         ]
 
     def test_graph_lr(self):
 
-        result = pipeline_to_mermaid(self.jobs)
+        result = GraphGenerator(self.jobs).to_mermaid()
         self.assertEqual('''```mermaid
 graph LR
 
@@ -116,8 +124,24 @@ class 730991285 success
 class 730991286 success
 ```''', result)
 
-    def test_grantt(self):
-        pass
+    def test_gantt(self):
+        result = GanttGenerator(self.jobs).to_mermaid()
+        self.assertEqual('''```mermaid
+gantt
+
+dateFormat  YYYY-MM-DDTHH:mm:ss.SSSZ
+axisFormat  %H:%M:%S
+
+section test
+unit tests : 730991283, 2020-09-12T12:26:05.370Z, 2020-09-12T12:26:41.665Z
+
+section build
+build : 730991284, 2020-09-12T12:26:42.182Z, 2020-09-12T12:27:38.126Z
+
+section deploy
+s3 : 730991285, 2020-09-12T12:27:43.757Z, 2020-09-12T12:28:35.406Z
+firebase : 730991286, 2020-09-12T12:27:43.757Z, 2020-09-12T12:28:44.406Z
+```''', result)
 
 
 class GitlabSkipped(unittest.TestCase):
@@ -149,7 +173,7 @@ class GitlabSkipped(unittest.TestCase):
         ]
 
     def test_graph_lr(self):
-        result = pipeline_to_mermaid(self.jobs)
+        result = GraphGenerator(self.jobs).to_mermaid()
         self.assertEqual('''```mermaid
 graph LR
 
@@ -178,7 +202,7 @@ class 730991286 skipped
 class 730991287 skipped
 ```''', result)
 
-    def test_grantt(self):
+    def test_gantt(self):
         pass
 
 
