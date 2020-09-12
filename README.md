@@ -100,6 +100,39 @@ s3 : 730991285, 2020-09-12T12:27:43.757Z, 2020-09-12T12:28:35.406Z
 firebase : 730991286, 2020-09-12T12:27:43.757Z, 2020-09-12T12:28:44.406Z
 ```
 
+```mermaid
+gantt
+
+dateFormat  YYYY-MM-DDTHH:mm:ss.SSSZ
+axisFormat  %H:%M:%S
+
+section build
+android : 730991283, 2020-09-12T12:26:05.370Z, 2020-09-12T12:26:41.665Z
+
+section deploy
+s3 :crit, active, 730991285, 2020-09-12T12:26:42.182Z, 2020-09-12T12:27:38.126Z
+firebase : 730991286, 2020-09-12T12:26:42.346Z, 2020-09-12T12:27:41.991Z
+
+section notify
+slack :crit, 730991287, 2020-09-12T12:27:43.757Z, 2020-09-12T12:28:35.406Z
+```
+
+```mermaid
+gantt
+
+dateFormat  YYYY-MM-DDTHH:mm:ss.SSSZ
+axisFormat  %H:%M:%S
+
+section build
+android :crit, 730991283, 2020-09-12T12:26:05.370Z, 2020-09-12T12:26:41.665Z
+ios : 730991284, 2020-09-12T12:26:05.370Z, 2020-09-12T12:26:47.665Z
+
+section deploy
+s3 :done, 730991285, after 730991284, 15s
+firebase :done, 730991286, after 730991284, 15s
+firebase :done, 730991287, after 730991284, 15s
+```
+
 ## todo:
 
 ### mermaid

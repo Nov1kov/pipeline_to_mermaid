@@ -43,7 +43,7 @@ classDef skipped fill:white,stroke:#999,color:black;
     def __job_statuses(self):
         text = '\n'
         for job in self.jobs:
-            class_status = 'warning' if job.status == 'failed' and job.allow_failure == True else job.status
+            class_status = 'warning' if job.status == 'failed' and job.allow_failure else job.status
             text += f"class {job.id} {class_status}\n"
         return text
 
@@ -75,6 +75,8 @@ axisFormat  %H:%M:%S
 
     def __get_status(self, job):
         if job.status == 'failed':
+            if job.allow_failure:
+                return 'crit, active,'
             return 'crit,'
         if job.status == 'running':
             return 'active,'

@@ -65,7 +65,23 @@ class 730991287 failed
 ```''', result)
 
     def test_gantt(self):
-        pass
+        result = GanttGenerator(self.jobs).to_mermaid()
+        self.assertEqual('''```mermaid
+gantt
+
+dateFormat  YYYY-MM-DDTHH:mm:ss.SSSZ
+axisFormat  %H:%M:%S
+
+section build
+android : 730991283, 2020-09-12T12:26:05.370Z, 2020-09-12T12:26:41.665Z
+
+section deploy
+s3 :crit, active, 730991285, 2020-09-12T12:26:42.182Z, 2020-09-12T12:27:38.126Z
+firebase : 730991286, 2020-09-12T12:26:42.346Z, 2020-09-12T12:27:41.991Z
+
+section notify
+slack :crit, 730991287, 2020-09-12T12:27:43.757Z, 2020-09-12T12:28:35.406Z
+```''', result)
 
 
 class GitlabGreen(unittest.TestCase):
@@ -152,22 +168,32 @@ class GitlabSkipped(unittest.TestCase):
                         'allow_failure': False,
                         'status': 'failed',
                         'stage': 'build',
+                        'started_at': '2020-09-12T12:26:05.370Z',
+                        'finished_at': '2020-09-12T12:26:41.665Z',
                         'name': 'android'}),
             StubObject({'id': '730991284',
                         'status': 'success',
                         'stage': 'build',
+                        'started_at': '2020-09-12T12:26:05.370Z',
+                        'finished_at': '2020-09-12T12:26:47.665Z',
                         'name': 'ios'}),
             StubObject({'id': '730991285',
                         'status': 'skipped',
                         'stage': 'deploy',
+                        'started_at': None,
+                        'finished_at': None,
                         'name': 's3'}),
             StubObject({'id': '730991286',
                         'status': 'skipped',
                         'stage': 'deploy',
+                        'started_at': None,
+                        'finished_at': None,
                         'name': 'firebase'}),
             StubObject({'id': '730991287',
                         'status': 'skipped',
                         'stage': 'deploy',
+                        'started_at': None,
+                        'finished_at': None,
                         'name': 'firebase'}),
 
         ]
@@ -203,7 +229,22 @@ class 730991287 skipped
 ```''', result)
 
     def test_gantt(self):
-        pass
+        result = GanttGenerator(self.jobs).to_mermaid()
+        self.assertEqual('''```mermaid
+gantt
+
+dateFormat  YYYY-MM-DDTHH:mm:ss.SSSZ
+axisFormat  %H:%M:%S
+
+section build
+android :crit, 730991283, 2020-09-12T12:26:05.370Z, 2020-09-12T12:26:41.665Z
+ios : 730991284, 2020-09-12T12:26:05.370Z, 2020-09-12T12:26:47.665Z
+
+section deploy
+s3 :done, 730991285, after 730991284, 5s
+firebase :done, 730991286, after 730991284, 5s
+firebase :done, 730991287, after 730991284, 5s
+```''', result)
 
 
 class StubObject:
