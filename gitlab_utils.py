@@ -20,7 +20,7 @@ def styles():
     return '''
 classDef failed fill:white,stroke:#db3b21,color:black;
 classDef success fill:white,stroke:#1aaa55,color:black;
-classDef classWarn fill:white,stroke:#fc9403,color:black;
+classDef warning fill:white,stroke:#fc9403,color:black;
 classDef canceled fill:white,stroke:#999,color:black;
 '''
 
@@ -35,7 +35,8 @@ def job_names(jobs):
 def job_statuses(jobs):
     text = '\n'
     for job in jobs:
-        text += f"class {job.id} {job.status}\n"
+        class_status = 'warning' if job.status == 'failed' and job.allow_failure == True else job.status
+        text += f"class {job.id} {class_status}\n"
     return text
 
 

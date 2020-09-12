@@ -35,7 +35,7 @@ graph LR
 
 classDef failed fill:white,stroke:#db3b21,color:black;
 classDef success fill:white,stroke:#1aaa55,color:black;
-classDef classWarn fill:white,stroke:#fc9403,color:black;
+classDef warning fill:white,stroke:#fc9403,color:black;
 classDef canceled fill:white,stroke:#999,color:black;
 
 730991283(unit tests)
@@ -60,7 +60,8 @@ class 730991286 success
                         'stage': 'build',
                         'name': 'android'}),
             StubObject({'id': '730991285',
-                        'status': 'success',
+                        'allow_failure': True,
+                        'status': 'failed',
                         'stage': 'deploy',
                         'name': 's3'}),
             StubObject({'id': '730991286',
@@ -68,6 +69,7 @@ class 730991286 success
                         'stage': 'deploy',
                         'name': 'firebase'}),
             StubObject({'id': '730991287',
+                        'allow_failure': False,
                         'status': 'failed',
                         'stage': 'notify',
                         'name': 'slack'}),
@@ -79,7 +81,7 @@ graph LR
 
 classDef failed fill:white,stroke:#db3b21,color:black;
 classDef success fill:white,stroke:#1aaa55,color:black;
-classDef classWarn fill:white,stroke:#fc9403,color:black;
+classDef warning fill:white,stroke:#fc9403,color:black;
 classDef canceled fill:white,stroke:#999,color:black;
 
 730991283(android)
@@ -93,7 +95,7 @@ classDef canceled fill:white,stroke:#999,color:black;
 730991286 --> 730991287
 
 class 730991283 success
-class 730991285 success
+class 730991285 warning
 class 730991286 success
 class 730991287 failed
 ```''', result)
