@@ -23,6 +23,7 @@ classDef failed fill:white,stroke:#db3b21,color:black;
 classDef success fill:white,stroke:#1aaa55,color:black;
 classDef warning fill:white,stroke:#fc9403,color:black;
 classDef skipped fill:white,stroke:#999,color:black;
+classDef running fill:white,stroke:#1f75cb,color:black;
 '''
 
     def __job_names(self):
@@ -45,9 +46,18 @@ classDef skipped fill:white,stroke:#999,color:black;
     def __job_statuses(self):
         text = '\n'
         for job in self.jobs:
-            class_status = 'warning' if job.status == 'failed' and job.allow_failure else job.status
+            if job.status == 'failed' and job.allow_failure or job.status == 'pending':
+                class_status = 'warning'
+            elif job.status == 'created' or job.status == 'manual' or job.status == 'canceled':
+                class_status = 'skipped'
+            else:
+                class_status = job.status
             text += f"class {job.id} {class_status}\n"
         return text
+
+
+def fix_job_name(name):
+    return name.replace(':', '-')
 
 
 class GanttGenerator:
@@ -75,10 +85,7 @@ axisFormat  %H:%M:%S
     def __stage(self, stage, jobs, last_job_id):
         text = f'\nsection {stage}\n'
         for job in jobs:
-            if not job.started_at or not job.finished_at:
-                text += f'{job.name} :{self.__get_status(job)} {job.id}, after {last_job_id}, 15s\n'
-            else:
-                text += f'{job.name} :{self.__get_status(job)} {job.id}, {job.started_at}, {job.finished_at}\n'
+            text += f'{fix_job_name(job.name)} :{self.__get_status(job)} {job.id}, ' + self.__get_job_length(job, last_job_id)
         return text
 
     def __get_status(self, job):
@@ -88,7 +95,7 @@ axisFormat  %H:%M:%S
             return 'crit,'
         if job.status == 'running':
             return 'active,'
-        if job.status == 'skipped':
+        if job.status == 'skipped' or job.status == 'created' or job.status == 'manual' or job.status == 'canceled':
             return 'done,'
         return ''
 
@@ -97,4 +104,13 @@ axisFormat  %H:%M:%S
         if finished_jobs:
             job = max(finished_jobs, key=lambda j: str_to_datetime(j.finished_at))
             return job.id
+        if stage_jobs:
+            return stage_jobs[0].id
         return None
+
+    def __get_job_length(self, job, last_job_id):
+        if not job.started_at or not job.finished_at:
+            if last_job_id:
+                return f'after {last_job_id}, 15s\n'
+            return '15s\n'
+        return f'{job.started_at}, {job.finished_at}\n'

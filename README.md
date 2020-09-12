@@ -81,6 +81,32 @@ class 730991286 skipped
 class 730991287 skipped
 ```
 
+
+```mermaid
+graph LR
+
+classDef failed fill:white,stroke:#db3b21,color:black;
+classDef success fill:white,stroke:#1aaa55,color:black;
+classDef warning fill:white,stroke:#fc9403,color:black;
+classDef skipped fill:white,stroke:#999,color:black;
+classDef running fill:white,stroke:#1f75cb,color:black;
+
+730991283(android)
+730991284(ios)
+730991285(slack:android)
+730991286(slack:ios)
+
+730991283 --> 730991285
+730991284 --> 730991285
+730991283 --> 730991286
+730991284 --> 730991286
+
+class 730991283 running
+class 730991284 running
+class 730991285 skipped
+class 730991286 skipped
+```
+
 ## Gitlab pipeline as gantt
 
 ```mermaid
@@ -133,13 +159,26 @@ firebase :done, 730991286, after 730991284, 15s
 firebase :done, 730991287, after 730991284, 15s
 ```
 
+```mermaid
+gantt
+
+dateFormat  YYYY-MM-DDTHH:mm:ss.SSSZ
+axisFormat  %H:%M:%S
+
+section build
+android :active, 730991283, 15s
+ios :active, 730991284, 15s
+
+section deploy
+slack-android :done, 730991285, after 730991283, 15s
+slack-ios :done, 730991286, after 730991283, 15s
+```
+
 ## todo:
 
 ### mermaid
 - interactions https://mermaid-js.github.io/mermaid/diagrams-and-syntax-and-examples/gantt.html#interaction
-
-### graph LR
-- 'running'
+- state
 
 ### ci tools
 - https://gitlab.version.fz-juelich.de/vis/jusense-cicd/-/wikis/discussion-on-howto-include-badges-in-gitlab-...

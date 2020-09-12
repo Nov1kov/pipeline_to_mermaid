@@ -47,6 +47,7 @@ classDef failed fill:white,stroke:#db3b21,color:black;
 classDef success fill:white,stroke:#1aaa55,color:black;
 classDef warning fill:white,stroke:#fc9403,color:black;
 classDef skipped fill:white,stroke:#999,color:black;
+classDef running fill:white,stroke:#1f75cb,color:black;
 
 730991283(android)
 730991285(s3)
@@ -124,6 +125,7 @@ classDef failed fill:white,stroke:#db3b21,color:black;
 classDef success fill:white,stroke:#1aaa55,color:black;
 classDef warning fill:white,stroke:#fc9403,color:black;
 classDef skipped fill:white,stroke:#999,color:black;
+classDef running fill:white,stroke:#1f75cb,color:black;
 
 730991283(unit tests)
 730991284(build)
@@ -207,6 +209,7 @@ classDef failed fill:white,stroke:#db3b21,color:black;
 classDef success fill:white,stroke:#1aaa55,color:black;
 classDef warning fill:white,stroke:#fc9403,color:black;
 classDef skipped fill:white,stroke:#999,color:black;
+classDef running fill:white,stroke:#1f75cb,color:black;
 
 730991283(android)
 730991284(ios)
@@ -246,6 +249,80 @@ firebase :done, 730991286, after 730991284, 15s
 firebase :done, 730991287, after 730991284, 15s
 ```''', result)
 
+
+class GitlabRunning(unittest.TestCase):
+
+    def setUp(self):
+        self.jobs = [
+            StubObject({'id': '730991283',
+                        'status': 'running',
+                        'stage': 'build',
+                        'started_at': '2020-09-12T12:26:05.370Z',
+                        'finished_at': None,
+                        'name': 'android'}),
+            StubObject({'id': '730991284',
+                        'status': 'running',
+                        'stage': 'build',
+                        'started_at': '2020-09-12T12:26:05.370Z',
+                        'finished_at': None,
+                        'name': 'ios'}),
+            StubObject({'id': '730991285',
+                        'status': 'created',
+                        'stage': 'deploy',
+                        'started_at': None,
+                        'finished_at': None,
+                        'name': 'slack:android'}),
+            StubObject({'id': '730991286',
+                        'status': 'created',
+                        'stage': 'deploy',
+                        'started_at': None,
+                        'finished_at': None,
+                        'name': 'slack:ios'}),
+        ]
+
+    def test_graph_lr(self):
+        result = GraphGenerator(self.jobs).to_mermaid()
+        self.assertEqual('''```mermaid
+graph LR
+
+classDef failed fill:white,stroke:#db3b21,color:black;
+classDef success fill:white,stroke:#1aaa55,color:black;
+classDef warning fill:white,stroke:#fc9403,color:black;
+classDef skipped fill:white,stroke:#999,color:black;
+classDef running fill:white,stroke:#1f75cb,color:black;
+
+730991283(android)
+730991284(ios)
+730991285(slack:android)
+730991286(slack:ios)
+
+730991283 --> 730991285
+730991284 --> 730991285
+730991283 --> 730991286
+730991284 --> 730991286
+
+class 730991283 running
+class 730991284 running
+class 730991285 skipped
+class 730991286 skipped
+```''', result)
+
+    def test_gantt(self):
+        result = GanttGenerator(self.jobs).to_mermaid()
+        self.assertEqual('''```mermaid
+gantt
+
+dateFormat  YYYY-MM-DDTHH:mm:ss.SSSZ
+axisFormat  %H:%M:%S
+
+section build
+android :active, 730991283, 15s
+ios :active, 730991284, 15s
+
+section deploy
+slack-android :done, 730991285, after 730991283, 15s
+slack-ios :done, 730991286, after 730991283, 15s
+```''', result)
 
 class StubObject:
     def __init__(self, d):
