@@ -1,40 +1,48 @@
 stages:
+  - docker
   - test
-  - build
   - deploy
+
+variables:
+  DOCKER_IMAGE_VERSION: 1
+
+build docker:
+  stage: docker
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $CI_REGISTRY_IMAGE:$DOCKER_IMAGE_VERSION
+  only:
+    changes:
+      - Dockerfile
+      - requirments.txt
 
 unit tests:
   stage: test
   tags: [gitlab-org-docker]
-  image: python:3.7
+  image: $CI_REGISTRY_IMAGE:$DOCKER_IMAGE_VERSION
   script:
-    - pip install --no-cache-dir -r requirements.txt
     - coverage run --source='.' showpipeline_tests.py
     - coverage xml
+    - coverage html
   artifacts:
+    paths:
+      - htmlcov/
     reports:
       cobertura: coverage.xml
 
-android:
-  stage: build
-  variables:
-    GIT_STRATEGY: none
-  script:
-    - sleep 20
-    - echo "build 1"
-
-ios:
-  stage: build
-  variables:
-    GIT_STRATEGY: none
-  script:
-    - sleep 24
-    - echo "build 2"
-
-staging:
+pages:
   stage: deploy
-  variables:
-    GIT_STRATEGY: none
+  dependencies:
+    - unit tests
   script:
-    - sleep 10
-    - echo "deploy"
+    - mv htmlcov/ public/
+  artifacts:
+    paths:
+      - public
+    expire_in: 30 days
+  only:
+    - master
