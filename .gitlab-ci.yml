@@ -26,8 +26,9 @@ unit tests:
   image: $CI_REGISTRY_IMAGE:$DOCKER_IMAGE_VERSION
   script:
     - coverage run --source='.' showpipeline_tests.py
-    - coverage xml
-    - coverage html
+    - coverage xml # for merge request
+    - coverage html # for pages
+    - coverage report # for badge and analytics --> repository
   artifacts:
     paths:
       - htmlcov/
@@ -53,6 +54,4 @@ notify merge request:
   tags: [ gitlab-org-docker ]
   image: $CI_REGISTRY_IMAGE:$DOCKER_IMAGE_VERSION
   script:
-    - echo $CI_PIPELINE_IID
-    - echo $CI_PIPELINE_ID
     - python gitlab_helper.py
