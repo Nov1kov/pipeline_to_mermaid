@@ -19,7 +19,7 @@ class GitlabHelper:
         project = self.get_project()
         merge_request = self.__get_mr_by_branch(os.environ['CI_COMMIT_BRANCH'])
         if merge_request:
-            pipeline = project.pipelines.get(id=os.environ['CI_PIPELINE_IID'])
+            pipeline = project.pipelines.get(id=os.environ['CI_PIPELINE_ID'])
             jobs = pipeline.jobs.list()
             text = GanttGenerator(jobs).to_mermaid()
             merge_request.notes.create({"body": text})

@@ -53,4 +53,6 @@ notify merge request:
   tags: [ gitlab-org-docker ]
   image: $CI_REGISTRY_IMAGE:$DOCKER_IMAGE_VERSION
   script:
+    - echo $CI_PIPELINE_IID
+    - echo $CI_PIPELINE_ID
     - python gitlab_helper.py
