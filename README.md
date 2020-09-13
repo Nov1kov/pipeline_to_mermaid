@@ -1,3 +1,7 @@
+## Pipeline as mermaid
+
+[![Coverage report](https://gitlab.com/Nov1kov/pipeline_to_mermaid/badges/master/coverage.svg)](https://nov1kov.gitlab.io/pipeline_to_mermaid/)
+
 #### required environments
 
 - `GITLAB_API_TOKEN` - gitlab api token
@@ -54,6 +58,7 @@ class 730991287 failed
 
 
 
+
 ```mermaid
 graph LR
 
@@ -81,7 +86,6 @@ class 730991285 skipped
 class 730991286 skipped
 class 730991287 skipped
 ```
-
 
 ```mermaid
 graph LR
