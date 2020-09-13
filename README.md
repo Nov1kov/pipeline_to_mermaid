@@ -53,6 +53,7 @@ class 730991287 failed
 ```
 
 
+
 ```mermaid
 graph LR
 
@@ -180,7 +181,13 @@ slack-ios :done, 730991286, after 730991283, 15s
 - interactions https://mermaid-js.github.io/mermaid/diagrams-and-syntax-and-examples/gantt.html#interaction
 - state
 
+### documentaion
+- https://pdoc3.github.io/pdoc/
+- https://pydoc-markdown.readthedocs.io/en/latest/docs/api-documentation/processors/
+
 ### ci tools
+- docker image with packages
+- code covertage
 - https://gitlab.version.fz-juelich.de/vis/jusense-cicd/-/wikis/discussion-on-howto-include-badges-in-gitlab-...
 - https://github.com/jongracecox/anybadge
 - https://docs.gitlab.com/ee/api/wikis.html

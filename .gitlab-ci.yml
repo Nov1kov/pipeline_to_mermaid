@@ -9,7 +9,11 @@ unit tests:
   image: python:3.7
   script:
     - pip install --no-cache-dir -r requirements.txt
-    - python showpipeline_tests.py
+    - coverage run --source='.' showpipeline_tests.py
+    - coverage xml
+  artifacts:
+    reports:
+      cobertura: coverage.xml
 
 android:
   stage: build
