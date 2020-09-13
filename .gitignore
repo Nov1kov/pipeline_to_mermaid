@@ -1,5 +1,6 @@
 .idea
 *.pyc
+htmlcov/
 
 # code coverage tool
 coverage.xml

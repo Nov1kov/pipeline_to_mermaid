@@ -1,7 +1,6 @@
 stages:
   - docker
   - test
-  - build
   - deploy
 
 variables:
@@ -19,6 +18,7 @@ build docker:
   only:
     changes:
       - Dockerfile
+      - requirments.txt
 
 unit tests:
   stage: test
@@ -27,30 +27,22 @@ unit tests:
   script:
     - coverage run --source='.' showpipeline_tests.py
     - coverage xml
+    - coverage html
   artifacts:
+    paths:
+      - htmlcov/
     reports:
       cobertura: coverage.xml
 
-android:
-  stage: build
-  variables:
-    GIT_STRATEGY: none
-  script:
-    - sleep 20
-    - echo "build 1"
-
-ios:
-  stage: build
-  variables:
-    GIT_STRATEGY: none
-  script:
-    - sleep 24
-    - echo "build 2"
-
-staging:
+pages:
   stage: deploy
-  variables:
-    GIT_STRATEGY: none
+  dependencies:
+    - unit tests
   script:
-    - sleep 10
-    - echo "deploy"
+    - mv htmlcov/ public/
+  artifacts:
+    paths:
+      - public
+    expire_in: 30 days
+  only:
+    - master
