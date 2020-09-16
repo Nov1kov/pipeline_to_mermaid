@@ -73,7 +73,7 @@ notify merge request:
     - python -m pipeline_mermaid.gitlab_helper
 
 
-build and upload to pypi:
+upload to pypi:
   environment:
     name: pypi
   stage: deploy

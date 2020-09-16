@@ -2,7 +2,8 @@
 
 [![Coverage report](https://gitlab.com/Nov1kov/pipeline_to_mermaid/badges/master/coverage.svg)](https://nov1kov.gitlab.io/pipeline_to_mermaid/)
 [![PyPI version](https://badge.fury.io/py/pipeline-mermaid.svg)](https://badge.fury.io/py/pipeline-mermaid)
-[![Pipeline](https://gitlab.com/Nov1kov/pipeline_to_mermaid/badges/master/pipeline.svg)](https://gitlab.com/user/project/pipelines))
+[![Pipeline](https://gitlab.com/Nov1kov/pipeline_to_mermaid/badges/master/pipeline.svg)](https://gitlab.com/user/project/pipelines)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
 Useful tool to show Gitlab pipeline as mermaid
@@ -198,9 +199,4 @@ slack-ios :done, 730991286, after 730991283, 15s
 - https://gitlab.version.fz-juelich.de/vis/jusense-cicd/-/wikis/discussion-on-howto-include-badges-in-gitlab-...
 - https://github.com/jongracecox/anybadge
 - https://docs.gitlab.com/ee/api/wikis.html
-- make python package
-
-### badges
-- pipeline success
-- version package
-- license
+- release versions
