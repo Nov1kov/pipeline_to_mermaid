@@ -69,7 +69,8 @@ notify merge request:
   tags: [ gitlab-org-docker ]
   image: $CI_REGISTRY_IMAGE:$DOCKER_IMAGE_VERSION
   script:
-    - python gitlab_helper.py
+    - pip install pipeline-mermaid
+    - python -m pipeline_mermaid.gitlab_helper
 
 
 build and upload to pypi:
