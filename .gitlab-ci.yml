@@ -1,6 +1,7 @@
 stages:
   - docker
   - test
+  - build
   - deploy
 
 variables:
@@ -20,6 +21,7 @@ build docker:
       - Dockerfile
       - requirments.txt
 
+
 unit tests:
   stage: test
   tags: [gitlab-org-docker]
@@ -36,6 +38,18 @@ unit tests:
       cobertura: coverage.xml
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
 
+
+build package:
+  tags: [ gitlab-org-docker ]
+  image: $CI_REGISTRY_IMAGE:$DOCKER_IMAGE_VERSION
+  stage: build
+  script:
+    - python setup.py sdist bdist_wheel
+  artifacts:
+    paths:
+      - dist/*
+
+
 pages:
   stage: deploy
   dependencies:
@@ -49,9 +63,23 @@ pages:
   only:
     - master
 
+
 notify merge request:
   stage: deploy
   tags: [ gitlab-org-docker ]
   image: $CI_REGISTRY_IMAGE:$DOCKER_IMAGE_VERSION
   script:
     - python gitlab_helper.py
+
+
+build and upload to pypi:
+  environment:
+    name: pypi
+  stage: deploy
+  dependencies:
+    - build package
+  tags: [ gitlab-org-docker ]
+  image: $CI_REGISTRY_IMAGE:$DOCKER_IMAGE_VERSION
+  when: manual
+  script:
+    - twine upload dist/* --non-interactive -u __token__ -p $PYPI_TOKEN --verbose

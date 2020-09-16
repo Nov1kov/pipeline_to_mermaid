@@ -7,7 +7,7 @@ with open('HISTORY.md') as history_file:
     HISTORY = history_file.read()
 
 setup_args = dict(
-    name='pipeline-mermaid',
+    name='pipeline_mermaid',
     version='0.1',
     description='Useful tool to show Gitlab pipeline as mermaid',
     long_description_content_type="text/markdown",

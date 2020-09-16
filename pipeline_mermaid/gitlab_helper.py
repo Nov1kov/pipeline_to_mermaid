@@ -1,7 +1,7 @@
 import os
 
-from generators import GanttGenerator
-from gitlab_utils import get_project
+from pipeline_mermaid.generators import GanttGenerator
+from pipeline_mermaid.gitlab_utils import get_project
 
 
 # https://github.community/t/feature-request-support-mermaid-markdown-graph-diagrams-in-md-files/1922/27

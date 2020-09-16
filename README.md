@@ -1,6 +1,9 @@
 ## Pipeline as mermaid
 
 [![Coverage report](https://gitlab.com/Nov1kov/pipeline_to_mermaid/badges/master/coverage.svg)](https://nov1kov.gitlab.io/pipeline_to_mermaid/)
+[![PyPI version](https://badge.fury.io/py/pipeline-mermaid.svg)](https://badge.fury.io/py/pipeline-mermaid)
+[![Pipeline](https://gitlab.com/Nov1kov/pipeline_to_mermaid/badges/master/pipeline.svg)](https://gitlab.com/Nov1kov/pipeline_to_mermaid/-/commit/%{commit_sha}/pipelines?ref=master)
+
 
 Useful tool to show Gitlab pipeline as mermaid
 

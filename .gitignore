@@ -1,7 +1,13 @@
+# IDE
 .idea
 *.pyc
-htmlcov/
 
-# code coverage tool
+# build package
+build
+dist
+pipeline_mermaid.egg-info
+
+# code coverage
 coverage.xml
 .coverage
+htmlcov/

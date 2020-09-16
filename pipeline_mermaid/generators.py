@@ -1,6 +1,6 @@
 from itertools import groupby
 
-from gitlab_utils import str_to_datetime, datetime_to_srt
+from pipeline_mermaid.gitlab_utils import str_to_datetime
 
 
 class GraphGenerator:

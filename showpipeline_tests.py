@@ -1,8 +1,6 @@
-import os
 import unittest
-from unittest import mock
 
-from generators import *
+from pipeline_mermaid.generators import *
 
 
 class GitlabWarningRed(unittest.TestCase):
