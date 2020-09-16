@@ -2,6 +2,8 @@
 
 [![Coverage report](https://gitlab.com/Nov1kov/pipeline_to_mermaid/badges/master/coverage.svg)](https://nov1kov.gitlab.io/pipeline_to_mermaid/)
 
+Useful tool to show Gitlab pipeline as mermaid
+
 #### required environments
 
 - `GITLAB_API_TOKEN` - gitlab api token
