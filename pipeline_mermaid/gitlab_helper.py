@@ -1,4 +1,5 @@
 import os
+import sys
 
 from pipeline_mermaid.generators import GanttGenerator
 from pipeline_mermaid.gitlab_utils import get_project
@@ -15,28 +16,29 @@ class GitlabHelper:
     def get_project(self):
         return get_project(self.gitlab_host, os.environ['GITLAB_API_TOKEN'], self.proj_id, True)
 
-    def show_pipeline_to_merge_request(self):
-        project = self.get_project()
+    def show_current_pipeline(self):
         merge_request = self.__get_mr_by_branch(os.environ['CI_COMMIT_BRANCH'])
-        if merge_request:
-            pipeline = project.pipelines.get(id=os.environ['CI_PIPELINE_ID'])
-            jobs = pipeline.jobs.list()
-            text = GanttGenerator(jobs).to_mermaid()
-            merge_request.notes.create({"body": text})
+        self.__show_pipeline_in_mr(merge_request, os.environ['CI_PIPELINE_ID'])
+
+    def show_pipeline(self, pipeline_id):
+        merge_request = self.__get_mr_by_branch(os.environ['CI_COMMIT_BRANCH'])
+        self.__show_pipeline_in_mr(merge_request, pipeline_id)
+
+    def __show_pipeline_in_mr(self, merge_request, pipeline_id):
+        if not merge_request:
+            return
+        project = self.get_project()
+        pipeline = project.pipelines.get(id=pipeline_id)
+        jobs = pipeline.jobs.list()
+        text = GanttGenerator(jobs).to_mermaid()
+        merge_request.notes.create({"body": text})
 
     def __get_mr_by_branch(self, branch_name):
         mr_list = self.get_project().mergerequests.list(source_branch=branch_name)
         if mr_list:
             return mr_list[0]
 
-    def test_pipeline(self, pipeline_id):
-        project = self.get_project()
-        #merge_request = project.mergerequests.get(id=os.environ['CI_MERGE_REQUEST_IID'])
-        pipeline = project.pipelines.get(pipeline_id)
-        jobs = pipeline.jobs.list()
-        print(jobs)
-
 
 if __name__ == "__main__":
     gl = GitlabHelper()
-    gl.show_pipeline_to_merge_request()
+    eval("GitlabHelper." + sys.argv[1])(gl, *sys.argv[2:])
