@@ -70,8 +70,8 @@ notify merge request:
   image: $CI_REGISTRY_IMAGE:$DOCKER_IMAGE_VERSION
   script:
     - pip install -e .
-    - python -m pipeline_mermaid show_current_pipeline
-    - python -m pipeline_mermaid show_pipeline 190875422
+    - python -m pipeline_mermaid.gitlab_helper show_current_pipeline
+    - python -m pipeline_mermaid.gitlab_helper show_pipeline 190875422
 
 
 upload to pypi:
