@@ -1,4 +1,4 @@
-## Pipeline as mermaid
+# Pipeline as mermaid
 
 [![Coverage report](https://gitlab.com/Nov1kov/pipeline_to_mermaid/badges/master/coverage.svg)](https://nov1kov.gitlab.io/pipeline_to_mermaid/)
 [![PyPI version](https://badge.fury.io/py/pipeline-mermaid.svg)](https://badge.fury.io/py/pipeline-mermaid)
@@ -8,10 +8,29 @@
 
 Useful tool to show Gitlab pipeline as mermaid
 
+## install
+
+```commandline
+pip install pipeline-mermaid
+```
+
 #### required environments
 
 - `GITLAB_API_TOKEN` - gitlab api token
 
+## Using
+
+### in .gitlab-ci.yml
+
+```yml
+notify merge request:
+  stage: deploy
+  only:
+    - merge_requests
+  script:
+    - python -m pipeline_mermaid.gitlab_helper show_current_pipeline
+```
+Show current pipeline in merge request notes. [Example merge request](https://gitlab.com/Nov1kov/pipeline_to_mermaid/-/merge_requests/4)
 
 ## Gitlab pipeline as graph LR
 
@@ -230,7 +249,11 @@ section deploy
   slack-ios: -1: created
 ```
 
-## todo:
+# todo:
+
+## README
+- add .gitlab-ci.yml examples
+- using as library
 
 ## gitlab 
 - try depend on CI_JOB_TOKEN
@@ -238,7 +261,6 @@ section deploy
 ### mermaid
 - interactions https://mermaid-js.github.io/mermaid/diagrams-and-syntax-and-examples/gantt.html#interaction
 - state
-- journey
 
 ### documentaion
 - https://pdoc3.github.io/pdoc/
