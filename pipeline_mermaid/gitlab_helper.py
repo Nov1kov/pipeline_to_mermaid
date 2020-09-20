@@ -16,9 +16,9 @@ class GitlabHelper:
     def get_project(self):
         return get_project(self.gitlab_host, os.environ['GITLAB_API_TOKEN'], self.proj_id, True)
 
-    def show_current_pipeline(self):
+    def show_current_pipeline(self, type='gantt'):
         merge_request = self.__get_mr()
-        self.__show_pipeline_in_mr(merge_request, os.environ['CI_PIPELINE_ID'])
+        self.__show_pipeline_in_mr(merge_request, os.environ['CI_PIPELINE_ID'], type)
 
     def show_pipeline(self, pipeline_id, type='gantt'):
         merge_request = self.__get_mr()
