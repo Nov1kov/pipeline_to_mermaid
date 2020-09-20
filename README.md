@@ -185,11 +185,60 @@ slack-android :done, 730991285, after 730991283, 15s
 slack-ios :done, 730991286, after 730991283, 15s
 ```
 
+## Gitlab pipeline as journey
+
+```mermaid
+journey
+section build
+  android: 5
+section deploy
+  s3: 3
+  firebase: 5
+section notify
+  slack: 1
+```
+
+```mermaid
+journey
+section test
+  unit tests: 5
+section build
+  build: 5
+section deploy
+  s3: 5
+  firebase: 5
+```
+
+```mermaid
+journey
+section build
+  android: 1
+  ios: 5
+section deploy
+  s3: -1: skipped
+  firebase: -1: skipped
+  firebase: -1: skipped
+```
+
+```mermaid
+journey
+section build
+  android: -1: running
+  ios: -1: running
+section deploy
+  slack-android: -1: created
+  slack-ios: -1: created
+```
+
 ## todo:
+
+## gitlab 
+- try depend on CI_JOB_TOKEN
 
 ### mermaid
 - interactions https://mermaid-js.github.io/mermaid/diagrams-and-syntax-and-examples/gantt.html#interaction
 - state
+- journey
 
 ### documentaion
 - https://pdoc3.github.io/pdoc/
@@ -199,4 +248,5 @@ slack-ios :done, 730991286, after 730991283, 15s
 - https://gitlab.version.fz-juelich.de/vis/jusense-cicd/-/wikis/discussion-on-howto-include-badges-in-gitlab-...
 - https://github.com/jongracecox/anybadge
 - https://docs.gitlab.com/ee/api/wikis.html
-- release versions
+- gitlab release versions
+- pylint (show errors in MR)

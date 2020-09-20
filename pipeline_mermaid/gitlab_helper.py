@@ -1,7 +1,7 @@
 import os
 import sys
 
-from pipeline_mermaid.generators import GanttGenerator
+from pipeline_mermaid.generators import GanttGenerator, GraphGenerator, JourneyGenerator
 from pipeline_mermaid.gitlab_utils import get_project
 
 
@@ -20,17 +20,25 @@ class GitlabHelper:
         merge_request = self.__get_mr()
         self.__show_pipeline_in_mr(merge_request, os.environ['CI_PIPELINE_ID'])
 
-    def show_pipeline(self, pipeline_id):
+    def show_pipeline(self, pipeline_id, type='gantt'):
         merge_request = self.__get_mr()
-        self.__show_pipeline_in_mr(merge_request, pipeline_id)
+        self.__show_pipeline_in_mr(merge_request, pipeline_id, type)
 
-    def __show_pipeline_in_mr(self, merge_request, pipeline_id):
+    def __show_pipeline_in_mr(self, merge_request, pipeline_id, type):
         if not merge_request:
             return
         project = self.get_project()
         pipeline = project.pipelines.get(id=pipeline_id)
         jobs = pipeline.jobs.list()
-        text = GanttGenerator(jobs).to_mermaid()
+        if type == 'gantt':
+            generator = GanttGenerator(jobs)
+        elif type == 'graph':
+            generator = GraphGenerator(jobs)
+        elif type == 'journey':
+            generator = JourneyGenerator(jobs)
+        else:
+            raise Exception("Unknown type of diagram")
+        text = generator.to_mermaid()
         merge_request.notes.create({"body": text})
 
     def __get_mr(self):

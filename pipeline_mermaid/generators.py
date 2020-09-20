@@ -48,16 +48,12 @@ classDef running fill:white,stroke:#1f75cb,color:black;
         for job in self.jobs:
             if job.status == 'failed' and job.allow_failure or job.status == 'pending':
                 class_status = 'warning'
-            elif job.status == 'created' or job.status == 'manual' or job.status == 'canceled':
+            elif job.status in ['created', 'manual', 'canceled']:
                 class_status = 'skipped'
             else:
                 class_status = job.status
             text += f"class {job.id} {class_status}\n"
         return text
-
-
-def fix_job_name(name):
-    return name.replace(':', '-')
 
 
 class GanttGenerator:
@@ -95,7 +91,7 @@ axisFormat  %H:%M:%S
             return 'crit,'
         if job.status == 'running':
             return 'active,'
-        if job.status == 'skipped' or job.status == 'created' or job.status == 'manual' or job.status == 'canceled':
+        if job.status in ['skipped', 'created', 'manual', 'canceled']:
             return 'done,'
         return ''
 
@@ -114,3 +110,30 @@ axisFormat  %H:%M:%S
                 return f'after {last_job_id}, 15s\n'
             return f'{job.created_at}, 15s\n'
         return f'{job.started_at}, {job.finished_at}\n'
+
+
+class JourneyGenerator:
+    def __init__(self, jobs):
+        self.jobs = jobs
+
+    def to_mermaid(self):
+        self.jobs.sort(key=lambda k: k.id)
+        scheme = 'journey\n'
+        for stage_name, stage_jobs in groupby(self.jobs, key=lambda j: j.stage):
+            scheme += f'section {stage_name}\n'
+            for job in stage_jobs:
+                scheme += f'  {fix_job_name(job.name)}: {self.__get_status(job)}\n'
+        return f'```mermaid\n{scheme}```'
+
+    def __get_status(self, job):
+        if job.status == 'failed':
+            if job.allow_failure:
+                return '3'
+            return '1'
+        if job.status in ['skipped', 'created', 'manual', 'canceled', 'running']:
+            return f'-1: {job.status}'
+        return '5'
+
+
+def fix_job_name(name):
+    return name.replace(':', '-')

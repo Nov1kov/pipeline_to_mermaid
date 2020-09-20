@@ -82,6 +82,19 @@ section notify
 slack :crit, 730991287, 2020-09-12T12:27:43.757Z, 2020-09-12T12:28:35.406Z
 ```''', result)
 
+    def test_journey(self):
+        result = JourneyGenerator(self.jobs).to_mermaid()
+        self.assertEqual('''```mermaid
+journey
+section build
+  android: 5
+section deploy
+  s3: 3
+  firebase: 5
+section notify
+  slack: 1
+```''', result)
+
 
 class GitlabGreen(unittest.TestCase):
 
@@ -157,6 +170,19 @@ build : 730991284, 2020-09-12T12:26:42.182Z, 2020-09-12T12:27:38.126Z
 section deploy
 s3 : 730991285, 2020-09-12T12:27:43.757Z, 2020-09-12T12:28:35.406Z
 firebase : 730991286, 2020-09-12T12:27:43.757Z, 2020-09-12T12:28:44.406Z
+```''', result)
+
+    def test_journey(self):
+        result = JourneyGenerator(self.jobs).to_mermaid()
+        self.assertEqual('''```mermaid
+journey
+section test
+  unit tests: 5
+section build
+  build: 5
+section deploy
+  s3: 5
+  firebase: 5
 ```''', result)
 
 
@@ -247,6 +273,19 @@ firebase :done, 730991286, after 730991284, 15s
 firebase :done, 730991287, after 730991284, 15s
 ```''', result)
 
+    def test_journey(self):
+        result = JourneyGenerator(self.jobs).to_mermaid()
+        self.assertEqual('''```mermaid
+journey
+section build
+  android: 1
+  ios: 5
+section deploy
+  s3: -1: skipped
+  firebase: -1: skipped
+  firebase: -1: skipped
+```''', result)
+
 
 class GitlabRunning(unittest.TestCase):
 
@@ -325,6 +364,19 @@ section deploy
 slack-android :done, 730991285, after 730991283, 15s
 slack-ios :done, 730991286, after 730991283, 15s
 ```''', result)
+
+    def test_journey(self):
+        result = JourneyGenerator(self.jobs).to_mermaid()
+        self.assertEqual('''```mermaid
+journey
+section build
+  android: -1: running
+  ios: -1: running
+section deploy
+  slack-android: -1: created
+  slack-ios: -1: created
+```''', result)
+
 
 class StubObject:
     def __init__(self, d):
