@@ -1,3 +1,6 @@
+# 0.3
+- support repeated jobs
+
 # 0.2
 - support journey diagram
 - methods for using by one line

@@ -49,18 +49,21 @@ class GitlabHelper:
         project = self.get_project()
         pipeline = project.pipelines.get(id=pipeline_id)
         jobs = pipeline.jobs.list()
-        if type == 'gantt':
-            generator = GanttGenerator(jobs)
-        elif type == 'graph':
-            generator = GraphGenerator(jobs)
-        elif type == 'journey':
-            generator = JourneyGenerator(jobs)
-        else:
-            raise Exception("Unknown type of diagram")
+        generator = get_mermaid_generator(jobs, type)
         return generator.to_mermaid()
+
+
+def get_mermaid_generator(jobs, type):
+    if type == 'gantt':
+        return GanttGenerator(jobs)
+    elif type == 'graph':
+        return GraphGenerator(jobs)
+    elif type == 'journey':
+        return JourneyGenerator(jobs)
+    else:
+        raise Exception("Unknown type of diagram")
 
 
 if __name__ == "__main__":
     gl = GitlabHelper()
     result = eval("GitlabHelper." + sys.argv[1])(gl, *sys.argv[2:])
-    print(result)
