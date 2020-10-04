@@ -71,6 +71,39 @@ class 730991287 failed
 class 730994567 success
 ```''', result)
 
+    def test_gantt(self):
+        result = GanttGenerator(self.jobs).to_mermaid()
+        self.assertEqual('''```mermaid
+gantt
+
+dateFormat  YYYY-MM-DDTHH:mm:ss.SSSZ
+axisFormat  %H:%M:%S
+
+section build
+android : 730991283, 2020-09-12T12:26:05.370Z, 2020-09-12T12:26:41.665Z
+
+section deploy
+s3 : 730991285, 2020-09-12T12:26:42.182Z, 2020-09-12T12:27:38.126Z
+firebase : 730991286, 2020-09-12T12:26:42.346Z, 2020-09-12T12:27:41.991Z
+
+section notify
+slack :crit, 730991287, 2020-09-12T12:27:43.757Z, 2020-09-12T12:28:35.406Z
+slack : 730994567, 2020-09-12T12:32:43.757Z, 2020-09-12T12:33:35.406Z
+```''', result)
+
+    def test_journey(self):
+        result = JourneyGenerator(self.jobs).to_mermaid()
+        self.assertEqual('''```mermaid
+journey
+section build
+  android: 5
+section deploy
+  s3: 5
+  firebase: 5
+section notify
+  slack: 5
+```''', result)
+
 
 if __name__ == '__main__':
     unittest.main()

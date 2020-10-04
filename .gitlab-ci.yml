@@ -27,7 +27,7 @@ unit tests:
   tags: [gitlab-org-docker]
   image: $CI_REGISTRY_IMAGE:$DOCKER_IMAGE_VERSION
   script:
-    - coverage run --source='.' -m unittest discover tests "*test*"
+    - coverage run --source pipeline_mermaid -m unittest discover tests "*test*"
     - coverage xml # for merge request
     - coverage html # for pages
     - coverage report # for badge and analytics --> repository

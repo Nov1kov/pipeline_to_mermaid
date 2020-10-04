@@ -1,12 +1,34 @@
+from abc import abstractmethod, ABC
 from itertools import groupby
 
 from pipeline_mermaid.gitlab_utils import str_to_datetime
 
 
-class GraphGenerator:
+class Generator(ABC):
 
     def __init__(self, jobs):
         self.jobs = jobs
+
+    @abstractmethod
+    def to_mermaid(self):
+        pass
+
+    def _without_repeated(self):
+        result = []
+        for job_name, repeated_jobs in groupby(self.jobs, key=lambda j: j.name):
+            repeated_jobs_list = list(repeated_jobs)
+            if len(repeated_jobs_list) > 1:
+                repeated_jobs_list.sort(key=lambda k: k.id, reverse=True)
+                result.append(repeated_jobs_list[0])
+            else:
+                result.append(repeated_jobs_list[0])
+        return result
+
+
+class GraphGenerator(Generator):
+
+    def __init__(self, jobs):
+        super().__init__(jobs)
 
     def to_mermaid(self):
         self.jobs.sort(key=lambda k: k.id)
@@ -35,24 +57,13 @@ classDef running fill:white,stroke:#1f75cb,color:black;
     def __job_flow_charts(self):
         text = '\n'
         last_stage_groups = []
-        for stage_name, stage_jobs in groupby(self.__without_repeated(), key=lambda j: j.stage):
+        for stage_name, stage_jobs in groupby(self._without_repeated(), key=lambda j: j.stage):
             stage_groups = list(stage_jobs)
             for job in stage_groups:
                 for prev_job in last_stage_groups:
                     text += f'{prev_job.id} --> {job.id}\n'
             last_stage_groups = stage_groups
         return text
-
-    def __without_repeated(self):
-        result = []
-        for job_name, repeated_jobs in groupby(self.jobs, key=lambda j: j.name):
-            repeated_jobs_list = list(repeated_jobs)
-            if len(repeated_jobs_list) > 1:
-                repeated_jobs_list.sort(key=lambda k: k.id, reverse=True)
-                result.append(repeated_jobs_list[0])
-            else:
-                result.append(repeated_jobs_list[0])
-        return result
 
     def __job_statuses(self):
         text = '\n'
@@ -67,10 +78,10 @@ classDef running fill:white,stroke:#1f75cb,color:black;
         return text
 
 
-class GanttGenerator:
+class GanttGenerator(Generator):
 
     def __init__(self, jobs):
-        self.jobs = jobs
+        super().__init__(jobs)
 
     def to_mermaid(self):
         self.jobs.sort(key=lambda k: k.id)
@@ -92,7 +103,8 @@ axisFormat  %H:%M:%S
     def __stage(self, stage, jobs, last_job_id):
         text = f'\nsection {stage}\n'
         for job in jobs:
-            text += f'{fix_job_name(job.name)} :{self.__get_status(job)} {job.id}, ' + self.__get_job_length(job, last_job_id)
+            text += f'{fix_job_name(job.name)} :{self.__get_status(job)} {job.id}, ' + self.__get_job_length(job,
+                                                                                                             last_job_id)
         return text
 
     def __get_status(self, job):
@@ -123,14 +135,15 @@ axisFormat  %H:%M:%S
         return f'{job.started_at}, {job.finished_at}\n'
 
 
-class JourneyGenerator:
+class JourneyGenerator(Generator):
+
     def __init__(self, jobs):
-        self.jobs = jobs
+        super().__init__(jobs)
 
     def to_mermaid(self):
         self.jobs.sort(key=lambda k: k.id)
         scheme = 'journey\n'
-        for stage_name, stage_jobs in groupby(self.jobs, key=lambda j: j.stage):
+        for stage_name, stage_jobs in groupby(self._without_repeated(), key=lambda j: j.stage):
             scheme += f'section {stage_name}\n'
             for job in stage_jobs:
                 scheme += f'  {fix_job_name(job.name)}: {self.__get_status(job)}\n'
