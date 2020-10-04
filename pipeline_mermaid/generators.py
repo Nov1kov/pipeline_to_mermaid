@@ -35,13 +35,24 @@ classDef running fill:white,stroke:#1f75cb,color:black;
     def __job_flow_charts(self):
         text = '\n'
         last_stage_groups = []
-        for k, g in groupby(self.jobs, key=lambda j: j.stage):
-            stage_groups = list(g)
+        for stage_name, stage_jobs in groupby(self.__without_repeated(), key=lambda j: j.stage):
+            stage_groups = list(stage_jobs)
             for job in stage_groups:
                 for prev_job in last_stage_groups:
                     text += f'{prev_job.id} --> {job.id}\n'
             last_stage_groups = stage_groups
         return text
+
+    def __without_repeated(self):
+        result = []
+        for job_name, repeated_jobs in groupby(self.jobs, key=lambda j: j.name):
+            repeated_jobs_list = list(repeated_jobs)
+            if len(repeated_jobs_list) > 1:
+                repeated_jobs_list.sort(key=lambda k: k.id, reverse=True)
+                result.append(repeated_jobs_list[0])
+            else:
+                result.append(repeated_jobs_list[0])
+        return result
 
     def __job_statuses(self):
         text = '\n'

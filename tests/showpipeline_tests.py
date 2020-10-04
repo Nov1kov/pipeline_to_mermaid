@@ -1,6 +1,7 @@
 import unittest
 
 from pipeline_mermaid.generators import *
+from tests.utils import StubObject
 
 
 class GitlabWarningRed(unittest.TestCase):
@@ -376,15 +377,6 @@ section deploy
   slack-android: -1: created
   slack-ios: -1: created
 ```''', result)
-
-
-class StubObject:
-    def __init__(self, d):
-        for a, b in d.items():
-            if isinstance(b, (list, tuple)):
-                setattr(self, a, [StubObject(x) if isinstance(x, dict) else x for x in b])
-            else:
-                setattr(self, a, StubObject(b) if isinstance(b, dict) else b)
 
 
 if __name__ == '__main__':
