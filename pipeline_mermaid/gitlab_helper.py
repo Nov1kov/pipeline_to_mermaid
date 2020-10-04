@@ -11,7 +11,10 @@ class GitlabHelper:
     def __init__(self, debug=False):
         self.debug = debug
         self.proj_id = os.environ['CI_PROJECT_ID']
-        self.gitlab_host = 'https://' + os.environ['CI_SERVER_HOST']
+        if 'CI_SERVER_URL' in os.environ:
+            self.gitlab_host = os.environ['CI_SERVER_URL']
+        else:
+            self.gitlab_host = 'https://' + os.environ['CI_SERVER_HOST']
 
     def get_project(self):
         return get_project(self.gitlab_host, os.environ['GITLAB_API_TOKEN'], self.proj_id, True)
@@ -27,18 +30,7 @@ class GitlabHelper:
     def __show_pipeline_in_mr(self, merge_request, pipeline_id, type):
         if not merge_request:
             return
-        project = self.get_project()
-        pipeline = project.pipelines.get(id=pipeline_id)
-        jobs = pipeline.jobs.list()
-        if type == 'gantt':
-            generator = GanttGenerator(jobs)
-        elif type == 'graph':
-            generator = GraphGenerator(jobs)
-        elif type == 'journey':
-            generator = JourneyGenerator(jobs)
-        else:
-            raise Exception("Unknown type of diagram")
-        text = generator.to_mermaid()
+        text = self.pipeline_as_mermaid(pipeline_id, type)
         merge_request.notes.create({"body": text})
 
     def __get_mr(self):
@@ -53,7 +45,22 @@ class GitlabHelper:
         if mr_list:
             return mr_list[0]
 
+    def pipeline_as_mermaid(self, pipeline_id, type):
+        project = self.get_project()
+        pipeline = project.pipelines.get(id=pipeline_id)
+        jobs = pipeline.jobs.list()
+        if type == 'gantt':
+            generator = GanttGenerator(jobs)
+        elif type == 'graph':
+            generator = GraphGenerator(jobs)
+        elif type == 'journey':
+            generator = JourneyGenerator(jobs)
+        else:
+            raise Exception("Unknown type of diagram")
+        return generator.to_mermaid()
+
 
 if __name__ == "__main__":
     gl = GitlabHelper()
-    eval("GitlabHelper." + sys.argv[1])(gl, *sys.argv[2:])
+    result = eval("GitlabHelper." + sys.argv[1])(gl, *sys.argv[2:])
+    print(result)

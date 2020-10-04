@@ -27,7 +27,7 @@ unit tests:
   tags: [gitlab-org-docker]
   image: $CI_REGISTRY_IMAGE:$DOCKER_IMAGE_VERSION
   script:
-    - coverage run --source='.' showpipeline_tests.py
+    - coverage run --source='.' -m unittest discover tests "*test*"
     - coverage xml # for merge request
     - coverage html # for pages
     - coverage report # for badge and analytics --> repository
@@ -68,6 +68,7 @@ notify merge request:
   stage: deploy
   tags: [ gitlab-org-docker ]
   image: $CI_REGISTRY_IMAGE:$DOCKER_IMAGE_VERSION
+  dependencies: []
   script:
     - pip install -e .
     - python -m pipeline_mermaid.gitlab_helper show_current_pipeline graph
