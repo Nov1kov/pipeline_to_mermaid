@@ -8,29 +8,32 @@
 
 Useful tool to show Gitlab pipeline as mermaid
 
-## install
-
-```commandline
-pip install pipeline-mermaid
-```
-
 #### required environments
 
 - `GITLAB_API_TOKEN` - gitlab api token
 
 ## Using
 
+Show current pipeline in merge request notes. [Example merge request](https://gitlab.com/Nov1kov/pipeline_to_mermaid/-/merge_requests/4)
+
 ### in .gitlab-ci.yml
 
 ```yml
 notify merge request:
+  image: registry.gitlab.com/nov1kov/pipeline_to_mermaid:0.4
   stage: deploy
   only:
     - merge_requests
   script:
-    - python -m pipeline_mermaid.gitlab_helper show_current_pipeline
+    - pipeline-mermaid show_current_pipeline
 ```
-Show current pipeline in merge request notes. [Example merge request](https://gitlab.com/Nov1kov/pipeline_to_mermaid/-/merge_requests/4)
+
+### as python package
+
+```commandline
+pip install pipeline-mermaid
+pipeline-mermaid show_current_pipeline
+```
 
 ## Gitlab pipeline as mermaid
 
@@ -98,6 +101,7 @@ section deploy
 ### mermaid
 - interactions https://mermaid-js.github.io/mermaid/diagrams-and-syntax-and-examples/gantt.html#interaction
 - state
+- docker implement
 
 ### documentaion
 - https://pdoc3.github.io/pdoc/

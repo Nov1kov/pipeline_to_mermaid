@@ -1,3 +1,6 @@
+# 0.4
+- global command "pipeline-mermaid"
+
 # 0.3
 - support repeated jobs
 

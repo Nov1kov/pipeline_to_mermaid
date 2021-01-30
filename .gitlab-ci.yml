@@ -5,7 +5,7 @@ stages:
   - deploy
 
 variables:
-  DOCKER_IMAGE_VERSION: 1
+  PROJECT_VERSION: 0.4
 
 build docker:
   stage: docker
@@ -15,7 +15,7 @@ build docker:
   script:
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $CI_REGISTRY_IMAGE:$DOCKER_IMAGE_VERSION
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $CI_REGISTRY_IMAGE:$PROJECT_VERSION --build-arg PROJECT_VERSION=$PROJECT_VERSION
   only:
     changes:
       - Dockerfile
@@ -25,8 +25,9 @@ build docker:
 unit tests:
   stage: test
   tags: [gitlab-org-docker]
-  image: $CI_REGISTRY_IMAGE:$DOCKER_IMAGE_VERSION
+  image: python:3-slim
   script:
+    - pip install --no-cache-dir -r requirements.txt
     - coverage run --source pipeline_mermaid -m unittest discover tests "*test*"
     - coverage xml # for merge request
     - coverage html # for pages
@@ -41,7 +42,7 @@ unit tests:
 
 build package:
   tags: [ gitlab-org-docker ]
-  image: $CI_REGISTRY_IMAGE:$DOCKER_IMAGE_VERSION
+  image: python:3-slim
   stage: build
   script:
     - python setup.py sdist bdist_wheel
@@ -67,13 +68,12 @@ pages:
 notify merge request:
   stage: deploy
   tags: [ gitlab-org-docker ]
-  image: $CI_REGISTRY_IMAGE:$DOCKER_IMAGE_VERSION
+  image: $CI_REGISTRY_IMAGE:$PROJECT_VERSION
   dependencies: []
   script:
-    - pip install -e .
-    - python -m pipeline_mermaid.gitlab_helper show_current_pipeline graph
-    - python -m pipeline_mermaid.gitlab_helper show_pipeline 190875422
-    - python -m pipeline_mermaid.gitlab_helper show_pipeline 192204962 journey
+    - pipeline-mermaid show_current_pipeline graph
+    - pipeline_mermaid show_pipeline 190875422
+    - pipeline_mermaid show_pipeline 192204962 journey
 
 
 upload to pypi:
@@ -83,7 +83,7 @@ upload to pypi:
   dependencies:
     - build package
   tags: [ gitlab-org-docker ]
-  image: $CI_REGISTRY_IMAGE:$DOCKER_IMAGE_VERSION
+  image: $CI_REGISTRY_IMAGE:$PROJECT_VERSION
   when: manual
   script:
     - twine upload dist/* --non-interactive -u __token__ -p $PYPI_TOKEN --verbose
