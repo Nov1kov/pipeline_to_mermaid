@@ -92,8 +92,7 @@ section deploy
 # todo:
 
 ## README
-- add .gitlab-ci.yml examples
-- using as library
+- using as python library
 
 ## gitlab 
 - try depend on CI_JOB_TOKEN
@@ -101,7 +100,6 @@ section deploy
 ### mermaid
 - interactions https://mermaid-js.github.io/mermaid/diagrams-and-syntax-and-examples/gantt.html#interaction
 - state
-- docker implement
 
 ### documentaion
 - https://pdoc3.github.io/pdoc/

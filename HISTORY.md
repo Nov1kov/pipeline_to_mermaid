@@ -1,5 +1,6 @@
 # 0.4
 - global command "pipeline-mermaid"
+- custom message ability
 
 # 0.3
 - support repeated jobs

@@ -1,5 +1,4 @@
 stages:
-  - docker
   - test
   - build
   - deploy
@@ -8,14 +7,14 @@ variables:
   PROJECT_VERSION: "0.4"
 
 build docker:
-  stage: docker
+  stage: build
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
   script:
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $CI_REGISTRY_IMAGE:$PROJECT_VERSION
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $CI_REGISTRY_IMAGE:$PROJECT_VERSION --build-arg PROJECT_VERSION=$PROJECT_VERSION
   only:
     changes:
       - Dockerfile
@@ -71,9 +70,10 @@ notify merge request:
   image: $CI_REGISTRY_IMAGE:$PROJECT_VERSION
   dependencies: []
   script:
-    - pipeline-mermaid show_current_pipeline graph
+    - pipeline-mermaid show_pipeline
     - pipeline_mermaid show_pipeline 190875422
     - pipeline_mermaid show_pipeline 192204962 journey
+    - pipeline_mermaid show_pipeline 249125838 gantt 3 "test for ${PROJECT_VERSION} version"
 
 
 upload to pypi:

@@ -19,18 +19,22 @@ class GitlabHelper:
     def get_project(self):
         return get_project(self.gitlab_host, os.environ['GITLAB_API_TOKEN'], self.proj_id, True)
 
-    def show_current_pipeline(self, type='gantt'):
-        merge_request = self.__get_mr()
-        self.__show_pipeline_in_mr(merge_request, os.environ['CI_PIPELINE_ID'], type)
+    def show_pipeline(self, pipeline_id=0, type='gantt', merge_request_id=0, message=''):
+        if not merge_request_id:
+            merge_request = self.__get_mr()
+        else:
+            merge_request = self.get_project().mergerequests.get(merge_request_id)
+        if not pipeline_id:
+            pipeline_id = os.environ['CI_PIPELINE_ID']
+        self.__show_pipeline_in_mr(merge_request, pipeline_id, type, message)
 
-    def show_pipeline(self, pipeline_id, type='gantt'):
-        merge_request = self.__get_mr()
-        self.__show_pipeline_in_mr(merge_request, pipeline_id, type)
-
-    def __show_pipeline_in_mr(self, merge_request, pipeline_id, type):
+    def __show_pipeline_in_mr(self, merge_request, pipeline_id, type, message):
         if not merge_request:
             return
-        text = self.pipeline_as_mermaid(pipeline_id, type)
+        text = ''
+        if message:
+            text += message
+        text += '\n' + self.pipeline_as_mermaid(pipeline_id, type)
         merge_request.notes.create({"body": text})
 
     def __get_mr(self):
