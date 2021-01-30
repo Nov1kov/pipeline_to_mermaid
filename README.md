@@ -30,9 +30,19 @@ notify merge request:
 
 ### as python package
 
+#### install
 ```commandline
 pip install pipeline-mermaid
-pipeline-mermaid show_current_pipeline
+```
+
+show current pipeline in current merge request as gantt diagram
+```commandline
+pipeline-mermaid show_pipeline
+```
+
+show specific pipeline in specific merge request as gantt diagram
+```commandline
+pipeline-mermaid show_pipeline 249125838 gantt 3 
 ```
 
 ## Gitlab pipeline as mermaid

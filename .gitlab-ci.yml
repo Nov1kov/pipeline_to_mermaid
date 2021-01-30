@@ -71,9 +71,9 @@ notify merge request:
   dependencies: []
   script:
     - pipeline-mermaid show_pipeline
-    - pipeline_mermaid show_pipeline 190875422
-    - pipeline_mermaid show_pipeline 192204962 journey
-    - pipeline_mermaid show_pipeline 249125838 gantt 3 "test for ${PROJECT_VERSION} version"
+    - pipeline-mermaid show_pipeline 190875422
+    - pipeline-mermaid show_pipeline 192204962 journey
+    - pipeline-mermaid show_pipeline 249125838 gantt 3 "test for ${PROJECT_VERSION} version"
 
 
 upload to pypi:
