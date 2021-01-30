@@ -83,7 +83,8 @@ upload to pypi:
   dependencies:
     - build package
   tags: [ gitlab-org-docker ]
-  image: $CI_REGISTRY_IMAGE:$PROJECT_VERSION
+  image: python:3-slim
   when: manual
   script:
+    - pip install twine
     - twine upload dist/* --non-interactive -u __token__ -p $PYPI_TOKEN --verbose
