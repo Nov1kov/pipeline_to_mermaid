@@ -15,10 +15,6 @@ build docker:
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $CI_REGISTRY_IMAGE:$PROJECT_VERSION --build-arg project_version=$PROJECT_VERSION
-  only:
-    changes:
-      - Dockerfile
-      - requirments.txt
 
 
 unit tests:
