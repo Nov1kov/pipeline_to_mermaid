@@ -1,3 +1,6 @@
+# 0.5
+- support downstream pipelines
+
 # 0.4
 - global command "pipeline-mermaid"
 - custom message ability

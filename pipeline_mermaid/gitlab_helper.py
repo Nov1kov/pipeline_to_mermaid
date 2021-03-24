@@ -33,8 +33,8 @@ class GitlabHelper:
             return
         text = ''
         if message:
-            text += message
-        text += '\n' + self.pipeline_as_mermaid(pipeline_id, type)
+            text += message + '\n'
+        text += self.pipeline_as_mermaid(pipeline_id, type)
         merge_request.notes.create({"body": text})
 
     def __get_mr(self):
@@ -52,9 +52,18 @@ class GitlabHelper:
     def pipeline_as_mermaid(self, pipeline_id, type):
         project = self.get_project()
         pipeline = project.pipelines.get(id=pipeline_id)
-        jobs = pipeline.jobs.list()
+        jobs = get_jobs_with_child(pipeline)
         generator = get_mermaid_generator(jobs, type)
         return generator.to_mermaid()
+
+
+def get_jobs_with_child(pl):
+    jobs = pl.jobs.list()
+    for bridge in pl.bridges.list():
+        if bridge.downstream_pipeline:
+            child_pl = pl.manager.get(bridge.downstream_pipeline['id'])
+            jobs += get_jobs_with_child(child_pl)
+    return jobs
 
 
 def get_mermaid_generator(jobs, type):
@@ -67,7 +76,3 @@ def get_mermaid_generator(jobs, type):
     else:
         raise Exception("Unknown type of diagram")
 
-
-if __name__ == "__main__":
-    gl = GitlabHelper()
-    result = eval("GitlabHelper." + sys.argv[1])(gl, *sys.argv[2:])
