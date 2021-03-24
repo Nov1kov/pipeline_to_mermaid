@@ -6,7 +6,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
-Useful tool to show Gitlab pipeline as mermaid
+The useful tool to show Gitlab pipeline as mermaid
 
 #### required environments
 
@@ -20,7 +20,7 @@ Show current pipeline in merge request notes. [Example merge request](https://gi
 
 ```yml
 notify merge request:
-  image: registry.gitlab.com/nov1kov/pipeline_to_mermaid:0.4
+  image: registry.gitlab.com/nov1kov/pipeline_to_mermaid:0.5
   stage: deploy
   only:
     - merge_requests
@@ -44,6 +44,15 @@ show specific pipeline in specific merge request as gantt diagram
 ```commandline
 pipeline-mermaid show_pipeline 249125838 gantt 3 
 ```
+
+#### as python library
+
+````python
+from pipeline_mermaid.gitlab_helper import GitlabHelper
+
+gl = GitlabHelper()
+gl.show_pipeline(249125838, "gantt", 3)
+````
 
 ## Gitlab pipeline as mermaid
 
@@ -100,9 +109,6 @@ section deploy
 ```
 
 # todo:
-
-## README
-- using as python library
 
 ## gitlab 
 - try depend on CI_JOB_TOKEN
